@@ -1,1 +1,22 @@
-if(!self.define){let e,s={};const i=(i,n)=>(i=new URL(i+".js",n).href,s[i]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=i,e.onload=s,document.head.appendChild(e)}else e=i,importScripts(i),s()}).then(()=>{let e=s[i];if(!e)throw new Error(`Module ${i} didn’t register its module`);return e}));self.define=(n,r)=>{const l=e||("document"in self?document.currentScript.src:"")||location.href;if(s[l])return;let o={};const c=e=>i(e,l),t={module:{uri:l},exports:o,require:c};s[l]=Promise.all(n.map(e=>t[e]||c(e))).then(e=>(r(...e),o))}}define(["./workbox-9c191d2f"],function(e){"use strict";self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"registerSW.js",revision:"8bf1aa84c5a4bd85e407e8d483eed9c0"},{url:"index.html",revision:"86b24eeda57aacc956838a8c8b83f5fe"},{url:"assets/purify.es-BlKBIatO.js",revision:null},{url:"assets/index.es-BiUvopB9.js",revision:null},{url:"assets/index-Dqwo5lv2.js",revision:null},{url:"assets/index-BC2u_aF5.css",revision:null},{url:"assets/ArchivePages-CIp_aHk1.js",revision:null},{url:"assets/ArchivePages-BmZxzcgN.css",revision:null},{url:"apple-touch-icon.png",revision:"88f7635ce709955f0b3d5296d5a2ae75"},{url:"favicon.svg",revision:"3140dc71350d3fc0f9822d298511a213"},{url:"icon-192.png",revision:"878d93ef5e456be1c7ea76517ae0192e"},{url:"icon-512.png",revision:"4b002f5a4eec1858ea5c4b4096ca4820"},{url:"manifest.webmanifest",revision:"cf1873f116cd54b0bdb4a214845b481c"}],{}),e.cleanupOutdatedCaches(),e.registerRoute(new e.NavigationRoute(e.createHandlerBoundToURL("index.html")))});
+/* Reemplaza la copia vieja guardada en el celular y no vuelve a cachear la app. */
+self.addEventListener("install", () => {
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    (async () => {
+      const keys = await caches.keys();
+      await Promise.all(keys.map((key) => caches.delete(key)));
+      await self.registration.unregister();
+      const clients = await self.clients.matchAll({ type: "window" });
+      await Promise.all(
+        clients.map((client) => {
+          const url = new URL(client.url);
+          url.searchParams.set("lista", "nueva");
+          return client.navigate(url.href);
+        }),
+      );
+    })(),
+  );
+});

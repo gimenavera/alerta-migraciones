@@ -10,6 +10,24 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Migraciones" />
+    <link rel="manifest" href="/alerta-migraciones/manifest.webmanifest" />
+    <script>
+      (function () {
+        if (!("serviceWorker" in navigator)) return;
+        navigator.serviceWorker.getRegistrations().then(function (regs) {
+          if (!regs.length) return;
+          return Promise.all(regs.map(function (reg) { return reg.unregister(); })).then(function () {
+            if (!window.caches || sessionStorage.getItem("aa.cacheLimpio")) return;
+            return caches.keys().then(function (keys) {
+              return Promise.all(keys.map(function (key) { return caches.delete(key); }));
+            }).then(function () {
+              sessionStorage.setItem("aa.cacheLimpio", "1");
+              location.reload();
+            });
+          });
+        });
+      })();
+    </script>
     <meta name="description" content="Alerta migraciones. Operativo del 30/10 al 2/11. Destino clasificado." />
     <meta property="og:title" content="Alerta migraciones" />
     <meta property="og:description" content="Fuiste convocada a un control migratorio. Operativo del 30/10 al 2/11. Destino clasificado." />
@@ -21,9 +39,9 @@
     <link rel="apple-touch-icon" href="/alerta-migraciones/apple-touch-icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <script type="module" crossorigin src="/alerta-migraciones/assets/index-Dqwo5lv2.js"></script>
+    <script type="module" crossorigin src="/alerta-migraciones/assets/index-BCrFLSsi.js"></script>
     <link rel="stylesheet" crossorigin href="/alerta-migraciones/assets/index-BC2u_aF5.css">
-  <link rel="manifest" href="/alerta-migraciones/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/alerta-migraciones/registerSW.js"></script></head>
+  </head>
   <body>
     <div id="root"></div>
   </body>

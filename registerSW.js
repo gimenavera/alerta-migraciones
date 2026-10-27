@@ -1,1 +1,0 @@
-if('serviceWorker' in navigator) {window.addEventListener('load', () => {navigator.serviceWorker.register('/alerta-migraciones/sw.js', { scope: '/alerta-migraciones/' })})}
